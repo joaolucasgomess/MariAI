@@ -98,14 +98,38 @@ def avaliar_fitness(individuo, ambiente):
 def iniciar_individuos(populacao):
     return [Individuo() for _ in range(populacao)]
 
-def selecao(individuos):
+def selecao(individuos, tamanho_torneio=3):
     # TODO: Implementar seleção por torneio
+    selecionados = []
+    
+    for _ in range(tamanho_torneio):
+      torneio = random.sample(individuos, tamanho_torneio)
+      vencedor = max(torneio, key=lambda individuo: individuo.fitness)
+      selecionados.append(vencedor)
+    
+    return selecionados
     
 def cruzamento(pai1, pai2):
-    # TODO: Implementar cruzamento
+  # TODO: Implementar cruzamento
+  filho1 = Individuo()
+  filho2 = Individuo()
 
+  for i in range(len(pai1.acoes)):
+    if random.random() < 0.5:
+      filho1.acoes.append(pai1.acoes[i])
+      filho2.acoes.append(pai2.acoes[i])
+
+    else:
+      filho1.acoes.append(pai2.acoes[i])
+      filho2.acoes.append(pai1.acoes[i])
+
+    return filho1, filho2
+      
 def mutacao(individuo, taxa_mutacao=0.1):
-    # TODO: Implementar mutação
+  # TODO: Implementar mutação
+  for i in range(len(individuo.acoes)):
+    if random.random() < taxa_mutacao:
+      individuo.acoes[i] = (random.randint(0, 2), random.randint(1, 10))
 
 def imprimir_acoes_individuo(individuo):
     nomes_acoes = ["esquerda", "direita", "A"]
@@ -140,7 +164,7 @@ def algoritmo_genetico(populacao, ambiente, geracoes=100):
             melhor_individuo = individuo_atual
 
         print(f"Geração {geracao}: Melhor Fitness {melhor_fitness}")
-        print(f"Melhores Ações: {imprimir_acoes_individuo(melhor_individuo)}")
+        # print(f"Melhores Ações: {imprimir_acoes_individuo(melhor_individuo)}")
 
     return melhor_individuo
 
